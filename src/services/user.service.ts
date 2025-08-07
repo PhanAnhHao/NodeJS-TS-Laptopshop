@@ -86,6 +86,22 @@ const getUserById = async (id: string) => {
     }
 }
 
+const getUserWithRoleById = async (id: string) => {
+    const user = await prisma.user.findUnique({
+        where: { id: +id },
+        include: {
+            role: true
+        },
+        omit: {
+            password: true
+        },
+    });
+    // 1 là dùng omit của ORM prisma, 2 là dùng delete của JS
+    // delete user.password;
+
+    return user;
+}
+
 const getAdminUserById = async (id: string) => {
     try {
         const user = await prisma.user.findUnique({
@@ -127,7 +143,7 @@ const updateAdminUserById = async (
 
 
 export {
-    getAllUsers, getUserById,
+    getAllUsers, getUserById, getUserWithRoleById,
     getAllRoles, handleAdminCreateUser, handleAdminDeleteUser, getAdminUserById, updateAdminUserById,
     hashPassword, comparePassword
 }

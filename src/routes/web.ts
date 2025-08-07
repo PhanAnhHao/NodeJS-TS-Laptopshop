@@ -20,8 +20,15 @@ import {
     postAdminDeleteProduct,
     postAdminUpdateProduct
 } from "controllers/admin/product.controller";
-import { getLoginPage, getRegisterPage, postRegister } from "controllers/client/auth.controller";
+import {
+    getLoginPage,
+    getRegisterPage,
+    getSuccessRedirectPage,
+    postLogout,
+    postRegister
+} from "controllers/client/auth.controller";
 import passport from "passport";
+import { isAdmin, isLogin } from "src/middleware/auth";
 
 const router = express.Router();
 
@@ -29,15 +36,17 @@ const webRoute = (app: Express) => {
 
     // web routes
     router.get("/", getHomePage);
+    router.get("/success-redirect", getSuccessRedirectPage);
     router.get("/product/:id", getProductPage);
-    router.get("/login", getLoginPage);
+    router.get("/login", isLogin, getLoginPage);
     router.post('/login', passport.authenticate('local', {
-        successRedirect: '/',
+        successRedirect: '/success-redirect',
         failureRedirect: '/login',
         failureMessage: true
     }));
-    router.get("/register", getRegisterPage);
+    router.get("/register", isLogin, getRegisterPage);
     router.post("/register", postRegister);
+    router.post("/logout", postLogout);
 
     // admin routes
     router.get("/admin", getDashboardPage);
@@ -55,10 +64,9 @@ const webRoute = (app: Express) => {
     router.get("/admin/view-product/:id", getAdminViewProductPage);
     router.post("/admin/update-product", fileUploadMiddleware("image", "images/product"), postAdminUpdateProduct);
 
-
-
     router.get("/admin/order", getAdminOrderPage);
-    app.use("/", router);
+
+    app.use("/", isAdmin, router);
 };
 
 export default webRoute;

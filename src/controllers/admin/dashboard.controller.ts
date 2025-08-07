@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 
 const getDashboardPage = async (req: Request, res: Response) => {
-    return res.render("admin/dashboard/show.ejs");
+    const user = req?.user ?? "";
+    return res.render("admin/dashboard/show.ejs", {
+        user
+    });
 };
 
 export { getDashboardPage }
