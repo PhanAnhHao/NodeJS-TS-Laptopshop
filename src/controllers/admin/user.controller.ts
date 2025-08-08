@@ -53,12 +53,7 @@ const postAdminUpdateUser = async (req: Request, res: Response) => {
     return res.redirect("/admin/user");
 }
 
-const getAdminOrderPage = async (req: Request, res: Response) => {
-    return res.render("admin/order/show.ejs");
-};
-
 
 export {
     getAdminUserPage, getAdminCreateUserPage, postAdminCreateUser, postAdminDeleteUser, getAdminViewUser, postAdminUpdateUser,
-    getAdminOrderPage
 }

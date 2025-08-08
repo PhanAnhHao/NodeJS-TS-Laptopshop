@@ -3,7 +3,7 @@ import { prisma } from "config/client";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { handleLogin } from "services/client/auth.service";
-import { comparePassword, getUserWithRoleById } from "services/user.service";
+import { comparePassword, getUserSumCart, getUserWithRoleById } from "services/user.service";
 
 const configPassportLocal = () => {
     passport.use(new LocalStrategy({
@@ -57,8 +57,12 @@ const configPassportLocal = () => {
     passport.deserializeUser(async function (user: any, callback) {
         const { id, username } = user;
         //query to database
-        const userInDB = await getUserWithRoleById(id)
-        return callback(null, { ...userInDB });
+        const userInDB: any = await getUserWithRoleById(id)
+        const sumCart = await getUserSumCart(id);
+        return callback(null, { ...userInDB, sumCart: sumCart });
+        // dùng ...userInDB thay vì callback(null, userInDB)
+        // muốn đảm bảo trả về một bản sao (copy) của userInDB, tránh thay đổi trực tiếp dữ liệu gốc sau này.
+        // Hoặc muốn thêm field khác (như role, sumCart...) sau này
     });
 
 }

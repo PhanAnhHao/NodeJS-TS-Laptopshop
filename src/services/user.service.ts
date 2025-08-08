@@ -102,6 +102,14 @@ const getUserWithRoleById = async (id: string) => {
     return user;
 }
 
+const getUserSumCart = async (id: string) => {
+    const user = await prisma.cart.findUnique({
+        where: { userId: +id },
+    });
+
+    return user?.sum ?? 0;
+}
+
 const getAdminUserById = async (id: string) => {
     try {
         const user = await prisma.user.findUnique({
@@ -143,7 +151,7 @@ const updateAdminUserById = async (
 
 
 export {
-    getAllUsers, getUserById, getUserWithRoleById,
+    getAllUsers, getUserById, getUserWithRoleById, getUserSumCart,
     getAllRoles, handleAdminCreateUser, handleAdminDeleteUser, getAdminUserById, updateAdminUserById,
     hashPassword, comparePassword
 }
