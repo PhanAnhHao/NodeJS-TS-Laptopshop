@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import { getHomePage } from "controllers/web.controller";
+import { getHomePage, getProductFilterPage } from "controllers/web.controller";
 import { getDashboardPage } from "controllers/admin/dashboard.controller";
 import {
     getAdminCreateUserPage,
@@ -47,6 +47,7 @@ const webRoute = (app: Express) => {
 
     // web routes
     router.get("/", getHomePage);
+    router.get("/products", getProductFilterPage);
     router.get("/success-redirect", getSuccessRedirectPage);
     router.get("/product/:id", getProductPage);
     router.get("/login", isLogin, getLoginPage);

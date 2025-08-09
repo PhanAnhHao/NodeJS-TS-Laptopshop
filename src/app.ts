@@ -4,6 +4,7 @@
 import express from "express";
 import 'dotenv/config';
 import webRoute from "src/routes/web";
+import apiRoutes from "src/routes/api";
 import getConnection from "config/database";
 import initDatabase from "config/seed";
 import passport from "passport";
@@ -63,6 +64,9 @@ app.use((req, res, next) => {
 
 // config routes
 webRoute(app);
+
+//api routes
+apiRoutes(app);
 
 getConnection();
 

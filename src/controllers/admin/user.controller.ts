@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+    countTotalUsersPages,
     getAdminUserById,
     getAllRoles, getAllUsers,
     handleAdminCreateUser, handleAdminDeleteUser,
@@ -7,9 +8,15 @@ import {
 } from "services/user.service";
 
 const getAdminUserPage = async (req: Request, res: Response) => {
-    const users = await getAllUsers();
+    const { page } = req.query;
+    let currentPage = page ? +page : 1;
+    if (currentPage <= 0) currentPage = 1;
+    const users = await getAllUsers(currentPage);
+    const totalPages = await countTotalUsersPages();
     return res.render("admin/user/show.ejs", {
-        users: users
+        users: users,
+        totalPages: +totalPages,
+        page: +currentPage
     });
 };
 
